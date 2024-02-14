@@ -58,9 +58,9 @@ spec:
         env:
         - name: SERVER_PORT 
           value: "8090"
-        # volumeMounts:
-        # - mountPath: /var/www/html 
-        #  name: demo-volume 
+        volumeMounts:
+        - mountPath: /var/www/html 
+          name: demo-volume 
 
         resources:
           limits:
@@ -68,10 +68,10 @@ spec:
           requests:
             cpu: 100m
         
-      # volumes:
-      # - name: demo-volume
-      #  hostPath: 
-      #    path: /tmp/data
+      volumes:
+      - name: demo-volume
+        hostPath: 
+          path: /tmp/data
 
 
 ---
