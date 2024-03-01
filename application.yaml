@@ -9,14 +9,14 @@ spec:
   source:
     repoURL: https://github.com/ak5475043/argocd-demo_project.git
     targetRevision: HEAD
-    path: dev
+    path: lab2
   destination: 
     server: https://kubernetes.default.svc
-    namespace: myapp
+  #   namespace: myapp
 
   syncPolicy:
-    syncOptions:
-    - CreateNamespace=true
+    # syncOptions:
+    # - CreateNamespace=true
 
     automated:
       selfHeal: true
