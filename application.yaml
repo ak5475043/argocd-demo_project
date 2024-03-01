@@ -12,11 +12,11 @@ spec:
     path: lab2
   destination: 
     server: https://kubernetes.default.svc
-  #   namespace: myapp
+     namespace: w255
 
   syncPolicy:
-    # syncOptions:
-    # - CreateNamespace=true
+     syncOptions:
+     - CreateNamespace=true
 
     automated:
       selfHeal: true
