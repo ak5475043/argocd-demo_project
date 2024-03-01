@@ -1,0 +1,51 @@
+# deployment-pythonapi.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-deployment
+  namespace: w255
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      initContainers:
+      - name: init-verify-redis-service-dns
+        image: busybox
+        command: ['sh', '-c', 'until nslookup redis-service.w255.svc.cluster.local; do echo waiting for redis-service; sleep 2; done']
+
+      - name: init-verify-redis-ready
+        image: busybox
+        command: ['sh', '-c', 'until echo PING | nc -w 1 redis-service.w255.svc.cluster.local 6379 | grep PONG; do echo waiting for redis ready; sleep 2; done']
+
+      containers:
+      - name: api-container
+        image: ayush2107/lab2:latest
+        ports:
+        - containerPort: 8000
+
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 30
+
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          failureThreshold: 30
+          periodSeconds: 10
